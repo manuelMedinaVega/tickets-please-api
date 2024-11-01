@@ -4,15 +4,22 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Filters\V1\TicketFilter;
+use App\Http\Requests\Api\V1\ReplaceTicketRequest;
 use App\Models\Ticket;
 use App\Http\Requests\Api\V1\StoreTicketRequest;
 use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\User;
+use App\Policies\V1\TicketPolicy;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Gate;
 
 class TicketController extends ApiController
 {
+
+    protected string $policyClass = TicketPolicy::class;
+
     /**
      * Display a listing of the resource.
      */
@@ -20,28 +27,43 @@ class TicketController extends ApiController
     {
         return TicketResource::collection(Ticket::filter($filters)->paginate());
     }
-
+    
     /**
-     * Store a newly created resource in storage.
+     * Remove the specified resource from storage.
      */
-    public function store(StoreTicketRequest $request)
+    public function destroy($ticket_id)
     {
         try {
-            $user = User::findOrFail($request->input('data.relationships.author.data.id'));
-        } catch(ModelNotFoundException $exception) {
-            return $this->ok('User not found', [
-                'error' => 'The provided user id does not exists'
-            ]);
+            $ticket = Ticket::findOrFail($ticket_id);
+
+            Gate::authorize('delete', $ticket);
+
+            $ticket->delete();
+
+            return $this->ok('Ticket successfully deleted');
+        } catch (ModelNotFoundException $exception) {
+            return $this->error('Ticket cannot be found', 404);
+        } catch(AuthorizationException $exception) {
+            return $this->error('You are not authorized to delete that resource', 403);
         }
+    }
 
-        $model = [
-            'title' => $request->input('data.attributes.title'),
-            'description' => $request->input('data.attributes.description'),
-            'status' => $request->input('data.attributes.status'),
-            'user_id' => $request->input('data.relationships.author.data.id')
-        ];
+    public function replace(ReplaceTicketRequest $request, $ticket_id)
+    {
+        // PUT
+        try {
+            $ticket = Ticket::findOrFail($ticket_id);
 
-        return new TicketResource(Ticket::create($model));
+            Gate::authorize('replace', $ticket);
+
+            $ticket->update($request->mappedAttributes());
+
+            return new TicketResource($ticket);
+        } catch(ModelNotFoundException $exception) {
+            return $this->error('Ticket cannot be found.', 404);
+        } catch(AuthorizationException $exception) {
+            return $this->error('You are not authorized to replace that resource', 403);
+        }
     }
 
     /**
@@ -66,24 +88,40 @@ class TicketController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
+     * Store a newly created resource in storage.
      */
-    public function update(UpdateTicketRequest $request, Ticket $ticket)
+    public function store(StoreTicketRequest $request)
     {
-        //
+        try {
+
+            Gate::authorize('store', Ticket::class);
+
+            return new TicketResource(Ticket::create($request->mappedAttributes()));
+
+        } catch(AuthorizationException $exception) {
+            return $this->error('You are not authorized to create that resource', 403);
+        }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Update the specified resource in storage.
      */
-    public function destroy($ticket_id)
+    public function update(UpdateTicketRequest $request, $ticket_id)
     {
+        // PATCH
         try {
             $ticket = Ticket::findOrFail($ticket_id);
-            $ticket->delete();
-            return $this->ok('Ticket successfully deleted');
-        } catch (ModelNotFoundException $exception) {
-            return $this->error('Ticket cannot be found', 404);
+
+            Gate::authorize('update', $ticket);
+
+            $ticket->update($request->mappedAttributes());
+            
+            return new TicketResource($ticket);
+        } catch(ModelNotFoundException $exception) {
+            return $this->error('Ticket cannot be found.', 404);
+        } catch(AuthorizationException $exception) {
+            return $this->error('You are not authorized to update that resource', 403);
         }
     }
+
 }
