@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ApiExceptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\LoginUserRequest;
 use App\Models\User;
@@ -17,7 +18,7 @@ class AuthController extends Controller
     public function login(LoginUserRequest $request)
     {
         if(!Auth::attempt($request->only('email', 'password'))) {
-            return $this->error('Invalid credentials', 401); //401: Unauthorized
+            return ApiExceptions::error('Invalid credentials', 401); //401: Unauthorized
         }
 
         $user = User::firstWhere('email', $request->email);
