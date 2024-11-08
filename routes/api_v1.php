@@ -25,7 +25,3 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function() {
     Route::patch('authors/{author}/tickets/{ticket}', [AuthorTicketsController::class, 'update']);
 
 });
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');

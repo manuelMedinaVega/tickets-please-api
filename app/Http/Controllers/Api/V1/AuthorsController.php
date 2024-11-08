@@ -12,7 +12,11 @@ use App\Http\Resources\V1\UserResource;
 class AuthorsController extends ApiController
 {
     /**
-     * Display a listing of the resource.
+     * Get authors.
+     * 
+     * Retrieves all users that created a ticket.
+     * 
+     * @group Showing Authors
      */
     public function index(AuthorFilter $filters)
     {
@@ -26,7 +30,11 @@ class AuthorsController extends ApiController
     }
 
     /**
-     * Display the specified resource.
+     * Get an author.
+     * 
+     * Retrieves all users that created a ticket.
+     * 
+     * @group Showing Authors
      */
     public function show(User $author)
     {
