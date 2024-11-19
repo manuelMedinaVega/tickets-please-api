@@ -11,8 +11,8 @@ jobs:
     
         steps:
             - name: Create a comment on the PR
-            uses: actions/github-script@v7
-            with:
+              uses: actions/github-script@v7
+              with:
                 script: |
                     github.rest.issues.createComment({
                         issue_number: context.issue.number,
