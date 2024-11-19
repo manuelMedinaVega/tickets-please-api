@@ -24,5 +24,5 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function() {
     Route::put('authors/{author}/tickets/{ticket}', [AuthorTicketsController::class, 'replace']);
     Route::patch('authors/{author}/tickets/{ticket}', [AuthorTicketsController::class, 'update']);
 
-    Route::get('prueba-bar-pr', function(){ dd('bad pr 5'); });
+    Route::get('prueba-bar-pr', function(){ dd('bad pr 6'); });
 });
