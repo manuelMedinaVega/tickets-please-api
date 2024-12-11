@@ -23,7 +23,4 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function() {
     Route::apiResource('authors.tickets', AuthorTicketsController::class)->except(['update']);
     Route::put('authors/{author}/tickets/{ticket}', [AuthorTicketsController::class, 'replace']);
     Route::patch('authors/{author}/tickets/{ticket}', [AuthorTicketsController::class, 'update']);
-
-    Route::get('prueba-bad-pr', function(){ dd('bad pr 8'); });
-    Route::get('good-pr', function() { dd('good pr 2'); });
 });
