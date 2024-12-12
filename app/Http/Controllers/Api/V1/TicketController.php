@@ -27,8 +27,7 @@ class TicketController extends ApiController
      * @queryParam filter[title] Filter by title. Wildcards are supported. Example: *fix*
      * 
      */
-    public function index(TicketFilter $filters)
-    {
+    public function index(TicketFilter $filters) {
         return TicketResource::collection(Ticket::filter($filters)->paginate());
     }
     
