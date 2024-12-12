@@ -28,7 +28,6 @@ class TicketController extends ApiController
      */
     public function index(TicketFilter $filters)
     {
-        // Comentario para pint
         return TicketResource::collection(Ticket::filter($filters)->paginate());
     }
 
@@ -127,4 +126,6 @@ class TicketController extends ApiController
 
         return ApiExceptions::error('You are not authorized to update that resource', 403);
     }
+
+    private function testing_pint() { dd('cambiamelo pint'); }
 }
