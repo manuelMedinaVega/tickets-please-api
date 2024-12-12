@@ -28,6 +28,7 @@ class TicketController extends ApiController
      */
     public function index(TicketFilter $filters)
     {
+        // Comentario para pint
         return TicketResource::collection(Ticket::filter($filters)->paginate());
     }
 
