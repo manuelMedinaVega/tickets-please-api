@@ -1,5 +1,8 @@
 name: Laravel Pint
 
+permissions:
+  contents: write
+
 on:
   pull_request
 
@@ -10,6 +13,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4.2.2
+              with:
+                ref: ${{ github.head_ref }}
 
             - name: Setup PHP and Composer
               uses: shivammathur/setup-php@v2
@@ -21,9 +26,14 @@ jobs:
               run: composer global require laravel/pint
 
             - name: Run Pint
-              run: pint --test
+              run: pint
 
             - name: Push changes back to repo
-              run: echo "TODO"
+              run: |
+                git config user.name "gh-actions"
+                git config user.email "gh@tickets-please.com"
+                git add .
+                git commit -m "Laravel Pint" || exit 0
+                git push
             
         
