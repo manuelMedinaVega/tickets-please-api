@@ -128,6 +128,6 @@ class TicketController extends ApiController
     }
 
     private function testing_pint() {
-        dd('cambiamelo pint');
+        dd('nuevo cambiamelo pint');
     }
 }
