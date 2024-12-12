@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ApiExceptions {
-
+class ApiExceptions
+{
     public static array $handlers = [
         AuthenticationException::class => 'handleAuthenticationException',
         ValidationException::class => 'handleValidationException',
         ModelNotFoundException::class => 'handleNotFoundException',
-        NotFoundHttpException::class => 'handleNotFoundException'
+        NotFoundHttpException::class => 'handleNotFoundException',
     ];
 
     public static function handleAuthenticationException(AuthenticationException $e, Request $request)
@@ -23,8 +23,8 @@ class ApiExceptions {
             'errors' => [
                 'type' => basename(get_class($e)),
                 'status' => 401,
-                'message' => $e->getMessage()
-            ]
+                'message' => $e->getMessage(),
+            ],
         ]);
     }
 
@@ -32,17 +32,18 @@ class ApiExceptions {
     {
         $errors = [];
         $type = basename(get_class($e));
-        foreach($e->errors() as $value) {
-            foreach($value as $message) {
+        foreach ($e->errors() as $value) {
+            foreach ($value as $message) {
                 $errors[] = [
                     'type' => $type,
                     'status' => 422,
-                    'message' => $message
+                    'message' => $message,
                 ];
             }
         }
+
         return response()->json([
-            'errors' => $errors
+            'errors' => $errors,
         ]);
     }
 
@@ -52,8 +53,8 @@ class ApiExceptions {
             'errors' => [
                 'type' => basename(get_class($e)),
                 'status' => 404,
-                'message' => $e->getMessage()
-            ]
+                'message' => $e->getMessage(),
+            ],
         ]);
     }
 
@@ -63,9 +64,8 @@ class ApiExceptions {
             'errors' => [
                 'type' => '',
                 'status' => $statusCode,
-                'message' => $message
-            ]
+                'message' => $message,
+            ],
         ]);
     }
-
 }

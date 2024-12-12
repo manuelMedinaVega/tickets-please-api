@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'manager@manager.com',
             'password' => bcrypt('password'),
             'name' => 'Manager',
-            'is_manager' => true
+            'is_manager' => true,
         ]);
 
         /*User::factory()->create([
