@@ -17,11 +17,13 @@ class AuthController extends Controller
 
     /**
      * Login
-     * 
+     *
      * Authenticates the user and returns the user's API token.
-     * 
+     *
      * @unauthenticated
+     *
      * @group Authentication
+     *
      * @response 200 {
             "message": "Authenticated",
             "data": {
@@ -32,7 +34,7 @@ class AuthController extends Controller
      */
     public function login(LoginUserRequest $request)
     {
-        if(!Auth::attempt($request->only('email', 'password'))) {
+        if (! Auth::attempt($request->only('email', 'password'))) {
             return ApiExceptions::error('Invalid credentials', 401); //401: Unauthorized
         }
 
@@ -42,20 +44,21 @@ class AuthController extends Controller
             'Authenticated',
             [
                 'token' => $user->createToken(
-                    'API token for '.$user->email, 
+                    'API token for '.$user->email,
                     Abilities::getAbilities($user),
                     now()->addMonth()
-                )->plainTextToken
+                )->plainTextToken,
             ]
         );
     }
 
     /**
      * Logout
-     * 
+     *
      * Signs out the user and destroy's the API token.
-     * 
+     *
      * @group Authentication
+     *
      * @response 200 {}
      */
     public function logout(Request $request)
@@ -64,5 +67,4 @@ class AuthController extends Controller
 
         return $this->ok('');
     }
-
 }

@@ -1,10 +1,11 @@
-<?php 
+<?php
 
 namespace App\Traits;
 
-trait ApiResponses {
-
-    protected function ok($message, $data = []) {
+trait ApiResponses
+{
+    protected function ok($message, $data = [])
+    {
         return $this->success($message, $data, 200);
     }
 
@@ -13,8 +14,7 @@ trait ApiResponses {
         return response()->json([
             'message' => $message,
             'data' => $data,
-            'status' => $statusCode
+            'status' => $statusCode,
         ], $statusCode);
     }
-
 }

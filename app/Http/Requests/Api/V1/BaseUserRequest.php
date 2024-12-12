@@ -6,22 +6,21 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class BaseUserRequest extends FormRequest
 {
-
     public function mappedAttributes(array $otherAttibutes = [])
     {
         $attributeMap = array_merge([
             'data.attributes.name' => 'name',
             'data.attributes.email' => 'email',
             'data.attributes.isManager' => 'is_manager',
-            'data.attributes.password' => 'password'
+            'data.attributes.password' => 'password',
         ], $otherAttibutes);
 
         $attributesToUpdate = [];
-        foreach($attributeMap as $key => $attribute) {
-            if($this->has($key)) {
+        foreach ($attributeMap as $key => $attribute) {
+            if ($this->has($key)) {
                 $value = $this->input($key);
 
-                if($attribute == 'password') {
+                if ($attribute == 'password') {
                     $value = bcrypt($value);
                 }
 
@@ -31,5 +30,4 @@ class BaseUserRequest extends FormRequest
 
         return $attributesToUpdate;
     }
-
 }

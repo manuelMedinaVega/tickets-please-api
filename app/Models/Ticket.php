@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Http\Filters\V1\QueryFilter;
-use App\Http\Filters\V1\TicketFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,10 +16,10 @@ class Ticket extends Model
         'title',
         'status',
         'description',
-        'user_id'
+        'user_id',
     ];
 
-    public function author(): BelongsTo 
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
