@@ -127,8 +127,8 @@ class TicketController extends ApiController
         return ApiExceptions::error('You are not authorized to update that resource', 403);
     }
 
-    private function testing_pint()
+    private function testing_tests()
     {
-        dd('nuevo cambiamelo pint');
+        dd('testing tests 2');
     }
 }
