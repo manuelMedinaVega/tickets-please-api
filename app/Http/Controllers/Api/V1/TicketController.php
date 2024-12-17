@@ -129,6 +129,6 @@ class TicketController extends ApiController
 
     private function testing_tests()
     {
-        dd('testing tests');
+        dd('testing tests 2');
     }
 }
